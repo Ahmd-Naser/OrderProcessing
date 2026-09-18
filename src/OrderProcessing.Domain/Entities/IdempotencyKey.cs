@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Xml;
-
+﻿
 namespace OrderProcessing.Domain.Entities;
 
-public class IdempotencyKeys
+public class IdempotencyKey
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Key { get; set; } = string.Empty;
