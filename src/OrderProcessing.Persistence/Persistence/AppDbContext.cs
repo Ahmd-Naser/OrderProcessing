@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OrderProcessing.Domain.Entities;
-using OrderProcessing.Infrastructure.Identity;
+using OrderProcessing.Persistence.Identity;
 
 
-namespace OrderProcessing.Infrastructure.Persistence;
+namespace OrderProcessing.Persistence.Persistence;
 
 public class AppDbContext: IdentityDbContext<ApplicationUser>
 {

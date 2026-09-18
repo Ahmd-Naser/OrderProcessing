@@ -3,6 +3,7 @@
     <Project Path="src/OrderProcessing.Application/OrderProcessing.Application.csproj" />
     <Project Path="src/OrderProcessing.Domain/OrderProcessing.Domain.csproj" />
     <Project Path="src/OrderProcessing.Infrastructure/OrderProcessing.Infrastructure.csproj" />
+    <Project Path="src/OrderProcessing.Persistence/OrderProcessing.Persistence.csproj" />
     <Project Path="src/OrderProcessing.WebApi/OrderProcessing.WebApi.csproj" />
   </Folder>
 </Solution>

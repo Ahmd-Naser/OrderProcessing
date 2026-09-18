@@ -16,7 +16,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OrderProcessing.Application\OrderProcessing.Application.csproj" />
-    <ProjectReference Include="..\OrderProcessing.Infrastructure\OrderProcessing.Infrastructure.csproj" />
+    <ProjectReference Include="..\OrderProcessing.InfraStructure\OrderProcessing.InfraStructure.csproj" />
+    <ProjectReference Include="..\OrderProcessing.Infrastructure\OrderProcessing.Persistence.csproj" />
+    <ProjectReference Include="..\OrderProcessing.Persistence\OrderProcessing.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
