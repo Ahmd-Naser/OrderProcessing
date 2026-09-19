@@ -11,6 +11,15 @@ public class ProductsController(ISender mediator) : ControllerBase
 {
     private readonly ISender _mediator = mediator;
 
+    /// <summary>
+    /// Creates a new product in the system.
+    /// </summary>
+    /// <param name="command">The product details</param>
+    /// <returns>The ID of the newly created product</returns>
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+
     [HttpPost]
     public async Task<ActionResult<int>> Create([FromBody] CreateProductCommand command, CancellationToken cancellationToken)
     {
