@@ -15,8 +15,8 @@ public class ProductsController(ISender mediator) : ControllerBase
     public async Task<ActionResult<int>> Create([FromBody] CreateProductCommand command, CancellationToken cancellationToken)
     {
         // إرسال الـ Command لـ MediatR، والـ Handler هيقوم بالواجب ويرجع الـ Id
-        var productId = await _mediator.Send(command, cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
 
-        return CreatedAtAction(nameof(Create), new { id = productId }, productId);
+        return CreatedAtAction(nameof(Create), new { id = result.Value }, result.Value);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using OrderProcessing.Application.Common.Models;
 
 namespace OrderProcessing.Application.Products.Commands.CreateProduct;
 
@@ -8,4 +9,4 @@ public record CreateProductCommand(
     decimal Price,
     int Stock,
     string UserId
-) : IRequest<int>; // هيرجع الـ Id بتاع المنتج الجديد بعد ما يتكريت
+) : IRequest<Result<int> >; // هيرجع الـ Id بتاع المنتج الجديد بعد ما يتكريت

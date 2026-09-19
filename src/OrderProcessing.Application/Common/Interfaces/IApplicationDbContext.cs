@@ -1,14 +1,16 @@
-﻿namespace OrderProcessing.Application.Common.Interfaces;
+﻿using OrderProcessing.Domain.Entities;
+
+namespace OrderProcessing.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
-    IQueryable<Domain.Entities.Product> Products { get; }
-    IQueryable<Domain.Entities.Tag> Tags { get; }
-    IQueryable<Domain.Entities.Cart> Carts { get; }
-    IQueryable<Domain.Entities.Order> Orders { get; }
-    IQueryable<Domain.Entities.OrderItem> OrderItems { get; }
-    IQueryable<Domain.Entities.Payment> Payments { get; }
-    IQueryable<Domain.Entities.IdempotencyKey> IdempotencyKeys { get; }
+    IQueryable<Product> Products { get; }
+    IQueryable<Tag> Tags { get; }
+    IQueryable<Cart> Carts { get; }
+    IQueryable<Order> Orders { get; }
+    IQueryable<OrderItem> OrderItems { get; }
+    IQueryable<Payment> Payments { get; }
+    IQueryable<IdempotencyKey> IdempotencyKeys { get; }
 
     void Add<T>(T entity) where T : class;
     void Remove<T>(T entity) where T : class;

@@ -1,19 +1,15 @@
 ﻿using MediatR;
 using OrderProcessing.Domain.Entities;
 using OrderProcessing.Application.Common.Interfaces;
+using OrderProcessing.Application.Common.Models;
 
 namespace OrderProcessing.Application.Products.Commands.CreateProduct;
 
-public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
+public class CreateProductCommandHandler(IApplicationDbContext context) : IRequestHandler<CreateProductCommand, Result<int> >
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IApplicationDbContext _context = context;
 
-    public CreateProductCommandHandler(IApplicationDbContext context)    
-    {
-        _context = context;
-    }
-
-    public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public async Task<Result<int> >Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         var product = new Product
         {
@@ -28,6 +24,6 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         _context.Add(product);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return product.Id; // رجع الـ Id
+        return Result.Success(product.Id); // رجع الـ Id
     }
 }
