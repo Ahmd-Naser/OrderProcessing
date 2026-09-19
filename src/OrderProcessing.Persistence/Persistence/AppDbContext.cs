@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using OrderProcessing.Application.Common.Interfaces;
 using OrderProcessing.Domain.Entities;
 using OrderProcessing.Persistence.Identity;
 
 
 namespace OrderProcessing.Persistence.Persistence;
 
-public class AppDbContext: IdentityDbContext<ApplicationUser>
+public class AppDbContext: IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -17,6 +18,20 @@ public class AppDbContext: IdentityDbContext<ApplicationUser>
     public DbSet<Cart> Carts => Set<Cart>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<IdempotencyKey> IdempotencyKeys => Set<IdempotencyKey>();
+
+    IQueryable<Product> IApplicationDbContext.Products => Products;
+
+    IQueryable<Tag> IApplicationDbContext.Tags => Tags;
+
+    IQueryable<Cart> IApplicationDbContext.Carts => Carts;
+
+    IQueryable<Order> IApplicationDbContext.Orders => Orders;
+
+    IQueryable<OrderItem> IApplicationDbContext.OrderItems => OrderItems;
+
+    IQueryable<Payment> IApplicationDbContext.Payments => Payments;
+
+    IQueryable<IdempotencyKey> IApplicationDbContext.IdempotencyKeys => IdempotencyKeys;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -44,5 +59,6 @@ public class AppDbContext: IdentityDbContext<ApplicationUser>
             .IsUnique();
     }
 
-
+    public void Add<T>(T entity) where T : class => base.Add(entity);
+    public void Remove<T>(T entity) where T : class => base.Remove(entity);
 }
