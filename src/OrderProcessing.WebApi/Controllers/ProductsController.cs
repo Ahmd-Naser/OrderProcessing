@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrderProcessing.Application.Products.Commands.CreateProduct;
 using OrderProcessing.Application.Products.Commands.DeleteProduct;
 using OrderProcessing.Application.Products.Commands.UpdateProduct;
+using OrderProcessing.Application.Products.Queries.GetProductById;
 using OrderProcessing.WebApi.Extensions;
 
 namespace OrderProcessing.WebApi.Controllers;
@@ -49,5 +50,14 @@ public class ProductsController(ISender mediator) : ControllerBase
         var result = await _mediator.Send(command, cancellationToken);
 
         return result.IsSuccess ? NoContent() : result.ToProblem();
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var query = new GetProductByIdQuery(id);
+        var result = await _mediator.Send(query, cancellationToken);
+
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
 }

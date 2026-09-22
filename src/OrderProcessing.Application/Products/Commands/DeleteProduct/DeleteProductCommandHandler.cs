@@ -14,7 +14,7 @@ internal class DeleteProductCommandHandler(IApplicationDbContext context) : IReq
             .ExecuteDeleteAsync(cancellationToken);
 
         if (rowsAffected == 0)
-            return Result.Failure(ProductErrors.ProductNotFound(request.Id) );
+            return Result.Failure(ProductErrors.NotFound(request.Id) );
 
         return Result.Success();
     }

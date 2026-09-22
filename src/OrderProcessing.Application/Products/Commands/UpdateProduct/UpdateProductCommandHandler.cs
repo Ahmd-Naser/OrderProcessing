@@ -12,7 +12,7 @@ internal class UpdateProductCommandHandler(IApplicationDbContext context) : IReq
         var product = await _context.Products.FindAsync(request.Id, cancellationToken);
 
         if (product == null)
-            return Result.Failure(ProductErrors.ProductNotFound(request.Id));
+            return Result.Failure(ProductErrors.NotFound(request.Id));
 
         // Update the product properties
         product.Name = request.Name;
