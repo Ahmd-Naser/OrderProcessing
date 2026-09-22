@@ -18,21 +18,6 @@ public class AppDbContext: IdentityDbContext<ApplicationUser>, IApplicationDbCon
     public DbSet<Cart> Carts => Set<Cart>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<IdempotencyKey> IdempotencyKeys => Set<IdempotencyKey>();
-
-    IQueryable<Product> IApplicationDbContext.Products => Products;
-
-    IQueryable<Tag> IApplicationDbContext.Tags => Tags;
-
-    IQueryable<Cart> IApplicationDbContext.Carts => Carts;
-
-    IQueryable<Order> IApplicationDbContext.Orders => Orders;
-
-    IQueryable<OrderItem> IApplicationDbContext.OrderItems => OrderItems;
-
-    IQueryable<Payment> IApplicationDbContext.Payments => Payments;
-
-    IQueryable<IdempotencyKey> IApplicationDbContext.IdempotencyKeys => IdempotencyKeys;
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder); // مهم جداً عشان جداول الـ Identity تنزل صح
@@ -59,6 +44,4 @@ public class AppDbContext: IdentityDbContext<ApplicationUser>, IApplicationDbCon
             .IsUnique();
     }
 
-    public void Add<T>(T entity) where T : class => base.Add(entity);
-    public void Remove<T>(T entity) where T : class => base.Remove(entity);
 }

@@ -8,5 +8,6 @@ public record CreateProductCommand(
     string Description,
     decimal Price,
     int Stock,
+    List<string> Pics,
     string UserId
 ) : IRequest<Result<int> >; // هيرجع الـ Id بتاع المنتج الجديد بعد ما يتكريت

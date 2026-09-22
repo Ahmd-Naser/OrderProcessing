@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderProcessing.Application.Products.Commands.CreateProduct;
+using OrderProcessing.Application.Products.Commands.DeleteProduct;
+using OrderProcessing.WebApi.Extensions;
 
 namespace OrderProcessing.WebApi.Controllers;
 
@@ -27,5 +29,14 @@ public class ProductsController(ISender mediator) : ControllerBase
         var result = await _mediator.Send(command, cancellationToken);
 
         return CreatedAtAction(nameof(Create), new { id = result.Value }, result.Value);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteProductCommand(id);
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return result.IsSuccess ? NoContent() : result.ToProblem();
     }
 }

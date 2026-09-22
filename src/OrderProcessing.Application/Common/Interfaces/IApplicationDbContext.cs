@@ -1,19 +1,17 @@
-﻿using OrderProcessing.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using OrderProcessing.Domain.Entities;
 
 namespace OrderProcessing.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
-    IQueryable<Product> Products { get; }
-    IQueryable<Tag> Tags { get; }
-    IQueryable<Cart> Carts { get; }
-    IQueryable<Order> Orders { get; }
-    IQueryable<OrderItem> OrderItems { get; }
-    IQueryable<Payment> Payments { get; }
-    IQueryable<IdempotencyKey> IdempotencyKeys { get; }
-
-    void Add<T>(T entity) where T : class;
-    void Remove<T>(T entity) where T : class;
+    DbSet<Product> Products { get; }
+    DbSet<Tag> Tags { get; }
+    DbSet<Order> Orders { get; }
+    DbSet<OrderItem> OrderItems { get; } // أو أياً كان اسمها الصحيح
+    DbSet<Cart> Carts { get; }
+    DbSet<Payment> Payments { get; }
+    DbSet<IdempotencyKey> IdempotencyKeys { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

@@ -21,7 +21,7 @@ public class CreateProductCommandHandler(IApplicationDbContext context) : IReque
             IsActive = true
         };
 
-        _context.Add(product);
+        await _context.Products.AddAsync(product, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success(product.Id); // رجع الـ Id
