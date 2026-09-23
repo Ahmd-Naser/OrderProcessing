@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderProcessing.Application.Products.Commands.CreateProduct;
 using OrderProcessing.Application.Products.Commands.DeleteProduct;
+using OrderProcessing.Application.Products.Commands.UpdateIsActiveProduct;
 using OrderProcessing.Application.Products.Commands.UpdateProduct;
 using OrderProcessing.Application.Products.Queries.GetAllProducts;
 using OrderProcessing.Application.Products.Queries.GetProductById;
@@ -75,5 +76,14 @@ public class ProductsController(ISender mediator) : ControllerBase
 
         var result = await _mediator.Send(query, cancellationToken);
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+    }
+
+    [HttpPut("{id}/is-active-toggle")]
+    public async Task<IActionResult> ToggleIsActive([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var command = new UpdateIsActiveProductCommand(id);
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return result.IsSuccess ? NoContent() : result.ToProblem();
     }
 }
