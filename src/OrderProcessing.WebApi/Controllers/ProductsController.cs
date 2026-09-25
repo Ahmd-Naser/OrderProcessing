@@ -1,13 +1,9 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using OrderProcessing.Application.Products.Commands.CreateProduct;
+﻿using OrderProcessing.Application.Products.Commands.CreateProduct;
 using OrderProcessing.Application.Products.Commands.DeleteProduct;
 using OrderProcessing.Application.Products.Commands.UpdateIsActiveProduct;
 using OrderProcessing.Application.Products.Commands.UpdateProduct;
 using OrderProcessing.Application.Products.Queries.GetAllProducts;
 using OrderProcessing.Application.Products.Queries.GetProductById;
-using OrderProcessing.WebApi.Extensions;
 
 namespace OrderProcessing.WebApi.Controllers;
 

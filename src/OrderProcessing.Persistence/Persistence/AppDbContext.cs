@@ -42,6 +42,11 @@ public class AppDbContext: IdentityDbContext<ApplicationUser>, IApplicationDbCon
         builder.Entity<IdempotencyKey>()
             .HasIndex(ik => ik.Key)
             .IsUnique();
+
+        builder.Entity<Product>()
+            .HasMany(p => p.Tags)
+            .WithMany(t => t.Products)
+            .UsingEntity(j => j.ToTable("ProductTags"));
     }
 
 }
