@@ -16,6 +16,7 @@ public class AppDbContext: IdentityDbContext<ApplicationUser>, IApplicationDbCon
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<Cart> Carts => Set<Cart>();
+    public DbSet<CartItem> CartItems => Set<CartItem>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<IdempotencyKey> IdempotencyKeys => Set<IdempotencyKey>();
     protected override void OnModelCreating(ModelBuilder builder)

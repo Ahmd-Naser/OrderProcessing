@@ -11,7 +11,7 @@ public class Product
     public string Description { get; set; } = String.Empty;
     public List<string> Pics { get; set; } = new List<string>();
 
-    public List<Tag> Tags { get; set; } = [];
+    public ICollection<Tag> Tags { get; set; } = [];
     public decimal Price { get; set; }
     public int Stock { get; set; }
     public string UserId { get; set; } = string.Empty;

@@ -2,3 +2,4 @@
 global using OrderProcessing.Application.Common.Models;
 global using FluentValidation;
 global using OrderProcessing.Application.Common.Errors;
+global using Microsoft.EntityFrameworkCore;

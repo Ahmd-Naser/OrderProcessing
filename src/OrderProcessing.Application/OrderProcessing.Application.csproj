@@ -16,4 +16,8 @@
     <ProjectReference Include="..\OrderProcessing.Domain\OrderProcessing.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Orders\Commands\AddOrder\" />
+  </ItemGroup>
+
 </Project>
