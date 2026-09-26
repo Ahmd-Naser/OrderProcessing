@@ -14,7 +14,7 @@ public class Product
     public List<Tag> Tags { get; set; } = [];
     public decimal Price { get; set; }
     public int Stock { get; set; }
-    public string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
     //public string SellerName { get; set; }
     public bool IsActive { get; set; }
 }
