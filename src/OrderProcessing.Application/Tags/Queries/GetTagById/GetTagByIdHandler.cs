@@ -1,4 +1,5 @@
-﻿using OrderProcessing.Application.Common.Errors;
+﻿using Microsoft.EntityFrameworkCore;
+using OrderProcessing.Application.Common.Errors;
 using OrderProcessing.Application.Common.Interfaces;
 
 namespace OrderProcessing.Application.Tags.Queries.GetTagById;
@@ -9,9 +10,8 @@ internal class GetTagByIdHandler(IApplicationDbContext context) : IRequestHandle
 
     public async Task<Result<TagResponse>> Handle(GetTagByIdQuery request, CancellationToken cancellationToken)
     {
-        var tag = await _context.Tags.FindAsync(request.Id, cancellationToken);
 
-        if (tag == null)
+        if(await _context.Tags.AsNoTracking().FirstOrDefaultAsync(t => t.Id == request.Id , cancellationToken) is not { } tag)
             return Result.Failure<TagResponse>(TagErrors.NotFound(request.Id));
 
         var response = new TagResponse(tag.Id, tag.Name);

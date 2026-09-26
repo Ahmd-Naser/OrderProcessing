@@ -13,7 +13,7 @@ public class GetAllTagsHandler(IApplicationDbContext context) : IRequestHandler<
 
     public async Task<Result<List<TagResponse>>> Handle(GetAllTagsQuery request, CancellationToken cancellationToken)
     {
-        var query = _context.Tags.AsQueryable();
+        var query = _context.Tags.AsNoTracking().AsQueryable();
 
 
         if(!string.IsNullOrWhiteSpace(request.SearchTerm))
