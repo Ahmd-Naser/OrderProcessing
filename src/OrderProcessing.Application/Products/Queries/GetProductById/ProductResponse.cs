@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OrderProcessing.Application.Tags.Queries.GetTagById;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,5 +11,6 @@ public record ProductResponse(
     string Description,
     decimal Price,
     int Stock,
+    List<TagResponse> Tags,
     List<string> Pics
 );

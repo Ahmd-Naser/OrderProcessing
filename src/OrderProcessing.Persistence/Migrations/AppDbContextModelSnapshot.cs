@@ -177,7 +177,7 @@ namespace OrderProcessing.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("OrderProcessing.Domain.Entities.IdempotencyKey", b =>
@@ -206,7 +206,7 @@ namespace OrderProcessing.Persistence.Migrations
                     b.HasIndex("Key")
                         .IsUnique();
 
-                    b.ToTable("IdempotencyKeys");
+                    b.ToTable("IdempotencyKeys", (string)null);
                 });
 
             modelBuilder.Entity("OrderProcessing.Domain.Entities.Order", b =>
@@ -229,7 +229,7 @@ namespace OrderProcessing.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("OrderProcessing.Domain.Entities.OrderItem", b =>
@@ -258,7 +258,7 @@ namespace OrderProcessing.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("OrderProcessing.Domain.Entities.Payment", b =>
@@ -287,7 +287,7 @@ namespace OrderProcessing.Persistence.Migrations
                     b.HasIndex("OrderId")
                         .IsUnique();
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("OrderProcessing.Domain.Entities.Product", b =>
@@ -325,7 +325,7 @@ namespace OrderProcessing.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("OrderProcessing.Domain.Entities.Tag", b =>
@@ -342,7 +342,7 @@ namespace OrderProcessing.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("OrderProcessing.Infrastructure.Identity.ApplicationUser", b =>
@@ -422,7 +422,7 @@ namespace OrderProcessing.Persistence.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("ProductTag");
+                    b.ToTable("ProductTag", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

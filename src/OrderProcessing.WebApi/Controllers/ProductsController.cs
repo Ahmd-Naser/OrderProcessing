@@ -1,4 +1,5 @@
-﻿using OrderProcessing.Application.Products.Commands.CreateProduct;
+﻿using OrderProcessing.Application.Products.Commands.AssignTagsToProduct;
+using OrderProcessing.Application.Products.Commands.CreateProduct;
 using OrderProcessing.Application.Products.Commands.DeleteProduct;
 using OrderProcessing.Application.Products.Commands.UpdateIsActiveProduct;
 using OrderProcessing.Application.Products.Commands.UpdateProduct;
@@ -79,6 +80,17 @@ public class ProductsController(ISender mediator) : ControllerBase
     {
         var command = new UpdateIsActiveProductCommand(id);
         var result = await _mediator.Send(command, cancellationToken);
+
+        return result.IsSuccess ? NoContent() : result.ToProblem();
+    }
+
+   
+
+    [HttpPut("{id}/tags")]
+    public async Task<IActionResult> AssignTags([FromRoute] int id, [FromBody] AssignTagsToProductCommand command, CancellationToken cancellationToken)
+    {
+        var updatedCommand = command with { ProductId = id };
+        var result = await _mediator.Send(updatedCommand, cancellationToken);
 
         return result.IsSuccess ? NoContent() : result.ToProblem();
     }

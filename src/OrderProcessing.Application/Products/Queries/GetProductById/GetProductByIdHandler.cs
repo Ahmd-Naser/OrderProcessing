@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using OrderProcessing.Application.Common.Errors;
 using OrderProcessing.Application.Common.Interfaces;
+using OrderProcessing.Application.Tags.Queries.GetTagById;
 
 namespace OrderProcessing.Application.Products.Queries.GetProductById;
 
@@ -13,6 +14,7 @@ public class GetProductByIdHandler(IApplicationDbContext context) : IRequestHand
     {
         var product = await _context.Products
             .AsNoTracking()
+            .Include( p => p.Tags)
             .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
         if(product is null)
@@ -24,6 +26,7 @@ public class GetProductByIdHandler(IApplicationDbContext context) : IRequestHand
             product.Description,
             product.Price,
             product.Stock,
+            product.Tags.Select(t => new TagResponse(t.Id, t.Name)).ToList(),
             product.Pics 
         );
 
