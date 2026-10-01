@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderProcessing.Application.Common.Interfaces;
 using OrderProcessing.Domain.Entities;
 using OrderProcessing.Persistence.Identity;
+using System.Reflection;
 
 
 namespace OrderProcessing.Persistence.Persistence;
@@ -48,6 +49,10 @@ public class AppDbContext: IdentityDbContext<ApplicationUser>, IApplicationDbCon
             .HasMany(p => p.Tags)
             .WithMany(t => t.Products)
             .UsingEntity(j => j.ToTable("ProductTag"));
+
+
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        base.OnModelCreating(builder);
     }
 
 }
