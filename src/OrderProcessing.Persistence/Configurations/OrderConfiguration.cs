@@ -11,28 +11,22 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         builder.HasKey(o => o.Id);
 
-        // ربط الـ UserId (مهم لو هتعمل Index عليه بعدين للسرعة)
         builder.Property(o => o.UserId)
             .IsRequired()
-            .HasMaxLength(450); // الطول القياسي لـ Identity User Id
+            .HasMaxLength(450); 
 
-        // ضبط نوع السعر لمنع مشاكل التقريب في الـ SQL
         builder.Property(o => o.TotalAmount)
             .HasColumnType("decimal(18,2)");
 
-        // تحويل حالة الطلب لنص في الداتابيز (Pending, Shipped...)
         builder.Property(o => o.Status)
             .HasConversion<string>()
             .HasMaxLength(50);
 
-        // علاقة 1-to-Many مع الـ OrderItems
-        // مش محتاجين نكتبها لأن EF Core بيفهمها لوحده، بس كتابتها بتوثق الكود
         builder.HasMany(o => o.OrderItems)
             .WithOne(oi => oi.Order)
             .HasForeignKey(oi => oi.OrderId)
-            .OnDelete(DeleteBehavior.Cascade); // لو الأوردر اتمسح، امسح تفاصيله
+            .OnDelete(DeleteBehavior.Cascade); 
 
-        // علاقة 1-to-1 مع الـ Payment
         builder.HasOne(o => o.Payment)
             .WithOne(p => p.Order)
             .HasForeignKey<Payment>(p => p.OrderId)

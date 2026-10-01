@@ -16,9 +16,8 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
 
         builder.Property(p => p.TransactionId)
             .HasMaxLength(255)
-            .IsRequired(false); // ممكن يكون Null في البداية لحد ما الدفع يتم
+            .IsRequired(false); 
 
-        // تحويل حالة الدفع لنص
         builder.Property(p => p.Status)
             .HasConversion<string>()
             .HasMaxLength(50);
