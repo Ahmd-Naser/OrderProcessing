@@ -11,4 +11,10 @@ public static class CartErrors
 
     public static Error Forbidden() =>
         new Error("Cart.Forbidden", "You do not have permission to modify or access this cart.", (int)HttpStatusCodes.Forbidden );
+
+    public static Error ProductNotAvailable() =>
+        new Error("Cart.ProductNotAvailable", "One or more products in the cart are not available.", (int)HttpStatusCodes.BadRequest);
+
+    public static Error EmptyCart() =>
+        new Error("Cart.Empty", "The cart is empty.", (int)HttpStatusCodes.BadRequest);
 }

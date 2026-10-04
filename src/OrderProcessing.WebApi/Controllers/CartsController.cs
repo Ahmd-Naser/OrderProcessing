@@ -3,6 +3,7 @@ using OrderProcessing.Application.Carts.Commands.AddToCart;
 using OrderProcessing.Application.Carts.Commands.DeleteCartItem;
 using OrderProcessing.Application.Carts.Commands.UpdateCartItem;
 using OrderProcessing.Application.Carts.Queries.GetAllCartItems;
+using OrderProcessing.Application.Carts.Queries.GetCheckoutPreview;
 using OrderProcessing.WebApi.Contracts.Carts;
 
 namespace OrderProcessing.WebApi.Controllers;
@@ -54,6 +55,18 @@ public class CartsController(ISender mediator) : ControllerBase
         var userId = "user-123"; // Replace with actual
 
         var query = new GetCartQuery(userId);
+
+        var result = await _mediator.Send(query, cancellationToken);
+
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+    }
+
+    [HttpGet("checkout-preview")]
+    public async Task<IActionResult> GetCheckoutPreview(CancellationToken cancellationToken)
+    {
+        var userId = "user-123"; // Replace with actual
+
+        var query = new GetCheckoutPreviewQuery(userId);
 
         var result = await _mediator.Send(query, cancellationToken);
 
