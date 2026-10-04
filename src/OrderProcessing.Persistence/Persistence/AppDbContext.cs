@@ -20,6 +20,8 @@ public class AppDbContext: IdentityDbContext<ApplicationUser>, IApplicationDbCon
     public DbSet<CartItem> CartItems => Set<CartItem>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<IdempotencyKey> IdempotencyKeys => Set<IdempotencyKey>();
+
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder); 

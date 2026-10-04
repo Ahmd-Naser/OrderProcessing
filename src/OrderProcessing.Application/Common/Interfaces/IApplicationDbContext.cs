@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using OrderProcessing.Domain.Entities;
 
 namespace OrderProcessing.Application.Common.Interfaces;
@@ -13,6 +14,8 @@ public interface IApplicationDbContext
     DbSet<CartItem> CartItems { get; }
     DbSet<Payment> Payments { get; }
     DbSet<IdempotencyKey> IdempotencyKeys { get; }
+
+    DatabaseFacade Database { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
