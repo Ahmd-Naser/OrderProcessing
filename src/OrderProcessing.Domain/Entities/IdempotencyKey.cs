@@ -4,9 +4,9 @@ namespace OrderProcessing.Domain.Entities;
 public class IdempotencyKey
 {
     public Guid Id { get; set; } = Guid.NewGuid();
-    public string Key { get; set; } = string.Empty;
+    public Guid Key { get; set; } 
     public string RequestName { get; set; } = string.Empty;
-    public string ResponseData { get; set; } = string.Empty;
+    public string ?ResponseData { get; set; } 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
 
