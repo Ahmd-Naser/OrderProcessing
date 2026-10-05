@@ -18,7 +18,13 @@ public class OrdersController(ISender sender) : ControllerBase
         // هنجيب الـ UserId من الـ Token (Claims)
         var userId = "test_user_id";
 
-        var command = new PlaceOrderCommand(userId!);
+        if (!Request.Headers.TryGetValue("X-Idempotency-Key", out var headerValue) ||
+            !Guid.TryParse(headerValue, out var idempotencyKey))
+        {
+            return BadRequest("Missing or invalid X-Idempotency-Key header. Must be a valid GUID.");
+        }
+
+        var command = new PlaceOrderCommand(userId!, idempotencyKey);
         var result = await _mediator.Send(command, cancellationToken);
 
         return result.IsSuccess ? Ok() : result.ToProblem();

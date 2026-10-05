@@ -14,6 +14,17 @@ public class PlaceOrderCommandHandler(IApplicationDbContext context) : IRequestH
 
         try
         {
+
+            if(await _context.IdempotencyKeys.AnyAsync(k => k.Key == request.IdempotencyKey, cancellationToken))
+                return Result.Failure(OrderErrors.DuplicateRequest());
+
+            await _context.IdempotencyKeys.AddAsync(new IdempotencyKey
+            {
+                Key = request.IdempotencyKey,
+                RequestName = nameof(PlaceOrderCommand), // تحديد اسم الكوماند هنا
+                CreatedAt = DateTime.UtcNow
+            }, cancellationToken);
+
             var cart = await _context.Carts
             .Include(c => c.CartItems)
             .ThenInclude(ci => ci.Product)

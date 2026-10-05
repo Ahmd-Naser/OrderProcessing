@@ -5,5 +5,6 @@ using System.Text;
 namespace OrderProcessing.Application.Orders.Commands.PlaceOrder;
 
 public record PlaceOrderCommand(
-    string UserId
+    string UserId,
+    Guid IdempotencyKey
 ) : IRequest<Result>;
