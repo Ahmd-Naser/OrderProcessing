@@ -1,13 +1,16 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using OrderProcessing.Application.Common.Interfaces;
-using OrderProcessing.Application.Products.Commands.CreateProduct;
-using OrderProcessing.Persistence.Identity;
-using OrderProcessing.Persistence.Persistence;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using OrderProcessing.Application.Common.Behaviors;
+using OrderProcessing.Application.Common.Interfaces;
+using OrderProcessing.Application.Products.Commands.CreateProduct;
+using OrderProcessing.Infrastructure.Services;
+using OrderProcessing.Persistence.Identity;
+using OrderProcessing.Persistence.Persistence;
 using Scalar.AspNetCore;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +42,9 @@ builder.Services.AddScoped<IApplicationDbContext>(provider =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(IdempotencyBehavior<,>));
+
 
 // تسجيل MediatR (بيروح يدور على الـ Handlers في مشروع الـ Application)
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly));
@@ -47,6 +53,13 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Creat
 builder.Services.AddValidatorsFromAssembly(typeof(CreateProductCommand).Assembly);
 // لو محتاج تفعيل الـ Validation التلقائي مع الـ MVC Controllers:
 builder.Services.AddFluentValidationAutoValidation();
+
+
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+
+// تسجيل الخدمة
+builder.Services.AddScoped<IPaymentService, StripePaymentService>();
+
 
 var app = builder.Build();
 

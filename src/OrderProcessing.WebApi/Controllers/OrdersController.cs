@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OrderProcessing.Application.Common.Interfaces;
 using OrderProcessing.Application.Orders.Commands.PlaceOrder;
 using System.Reflection;
 using System.Security.Claims;
@@ -8,15 +9,16 @@ namespace OrderProcessing.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class OrdersController(ISender sender) : ControllerBase
+public class OrdersController(ISender sender , IPaymentService paymentService) : ControllerBase
 {
     private readonly ISender _mediator = sender;
+    private readonly IPaymentService _paymentService = paymentService;
 
     [HttpPost]
     public async Task<IActionResult> PlaceOrder(CancellationToken cancellationToken)
     {
         // هنجيب الـ UserId من الـ Token (Claims)
-        var userId = "test_user_id";
+        var userId = "user-123";
 
         if (!Request.Headers.TryGetValue("X-Idempotency-Key", out var headerValue) ||
             !Guid.TryParse(headerValue, out var idempotencyKey))
@@ -25,8 +27,13 @@ public class OrdersController(ISender sender) : ControllerBase
         }
 
         var command = new PlaceOrderCommand(userId!, idempotencyKey);
-        var result = await _mediator.Send(command, cancellationToken);
+        var orderResult = await _mediator.Send(command, cancellationToken);
 
-        return result.IsSuccess ? Ok() : result.ToProblem();
+        if (!orderResult.IsSuccess)
+            return orderResult.ToProblem();
+
+        var result = await _paymentService.CreateCheckoutSessionAsync(orderResult.Value, cancellationToken);
+
+        return result.IsSuccess ? Ok(new {url = result.Value }) : result.ToProblem();
     }
 }

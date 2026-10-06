@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using OrderProcessing.Application.Common.Interfaces;
 
 namespace OrderProcessing.Application.Orders.Commands.PlaceOrder;
 
 public record PlaceOrderCommand(
     string UserId,
     Guid IdempotencyKey
-) : IRequest<Result>;
+) : IRequest<Result<int> > , IIdempotentCommand;
