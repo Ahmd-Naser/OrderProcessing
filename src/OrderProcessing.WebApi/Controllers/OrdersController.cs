@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderProcessing.Application.Common.Interfaces;
 using OrderProcessing.Application.Orders.Commands.PlaceOrder;
+using OrderProcessing.Application.Orders.Queries.GetUserOrderById;
+using OrderProcessing.Application.Orders.Queries.GetUserOrders;
 using System.Reflection;
 using System.Security.Claims;
 
@@ -35,5 +37,27 @@ public class OrdersController(ISender sender , IPaymentService paymentService) :
         var result = await _paymentService.CreateCheckoutSessionAsync(orderResult.Value, cancellationToken);
 
         return result.IsSuccess ? Ok(new {url = result.Value }) : result.ToProblem();
+    }
+
+    [HttpGet("my-orders")]
+    public async Task<IActionResult> GetUserOrders( CancellationToken cancellationToken)
+    {
+        var userId = "user-123";
+
+        var query = new GetUserOrdersQuery(userId);
+        var result = await _mediator.Send(query, cancellationToken);
+
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+    }
+
+    [HttpGet("{orderId}")]
+    public async Task<IActionResult> GetUserOrderById(int orderId, CancellationToken cancellationToken)
+    {
+        var userId = "user-123";
+
+        var query = new GetUserOrderByIdQuery(userId, orderId);
+        var result = await _mediator.Send(query, cancellationToken);
+
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
 }
