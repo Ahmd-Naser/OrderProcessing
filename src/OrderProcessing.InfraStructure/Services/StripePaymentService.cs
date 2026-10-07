@@ -32,6 +32,7 @@ public class StripePaymentService(IApplicationDbContext context) : IPaymentServi
         {
             //PaymentMethodTypes = ["card"],
             LineItems = [],
+            ExpiresAt = DateTime.UtcNow.AddMinutes(30),
             Mode = "payment",
             // Stripe هيبدل {CHECKOUT_SESSION_ID} بالـ ID الفعلي للجلسة
             SuccessUrl = $"{domain}/checkout/success?sessionId={{CHECKOUT_SESSION_ID}}",

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using OrderProcessing.Application.Orders.Commands.MarkOrderAsPaid;
 using Stripe;
+using OrderProcessing.Application.Orders.Commands.CancelOrder;
 
 namespace OrderProcessing.WebApi.Controllers;
 
@@ -44,6 +45,19 @@ public class WebhooksController(ISender sender, IConfiguration configuration) : 
                 }
             }
 
+            else if (stripeEvent.Type == "checkout.session.expired")
+            {
+                var session = stripeEvent.Data.Object as Stripe.Checkout.Session;
+                if(session != null)
+                {
+                    if (int.TryParse(session.ClientReferenceId, out var orderId))
+                    {
+                        var command = new CancelOrderCommand(orderId);
+                        await _mediator.Send(command);
+                    }
+                }
+            }
+
             return Ok();
         }
         catch (StripeException e)
@@ -52,4 +66,6 @@ public class WebhooksController(ISender sender, IConfiguration configuration) : 
             return BadRequest(e.Message);
         }
     }
+
+    
 }
