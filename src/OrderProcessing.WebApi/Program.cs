@@ -7,7 +7,7 @@ using OrderProcessing.Application.Common.Behaviors;
 using OrderProcessing.Application.Common.Interfaces;
 using OrderProcessing.Application.Products.Commands.CreateProduct;
 using OrderProcessing.Infrastructure.Services;
-using OrderProcessing.Persistence.Identity;
+using OrderProcessing.Persistence.Identity.Models;
 using OrderProcessing.Persistence.Persistence;
 using Scalar.AspNetCore;
 using Stripe;

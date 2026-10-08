@@ -16,4 +16,9 @@
     <ProjectReference Include="..\OrderProcessing.Domain\OrderProcessing.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Auth\Commands\Login\" />
+    <Folder Include="Auth\Commands\Register\" />
+  </ItemGroup>
+
 </Project>

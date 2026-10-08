@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using OrderProcessing.Application.Common.Interfaces;
 using OrderProcessing.Domain.Entities;
-using OrderProcessing.Persistence.Identity;
+using OrderProcessing.Persistence.Identity.Models;
 using System.Reflection;
 
 
