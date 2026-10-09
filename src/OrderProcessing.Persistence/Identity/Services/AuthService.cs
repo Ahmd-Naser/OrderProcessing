@@ -39,8 +39,44 @@ public class AuthService(
         return Result.Success(response);
     }
 
-    public Task<Result<AuthResponse>> RegisterAsync(RegisterCommand request, CancellationToken cancellationToken = default)
+    public async Task<Result<AuthResponse>> RegisterAsync(RegisterCommand request, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        if (await _userManager.FindByEmailAsync(request.Email) is not null )
+            return Result.Failure<AuthResponse>(UserErrors.DuplicatedEmail);
+
+        var user = new ApplicationUser()
+        {
+            UserName = request.Email,
+            Email = request.Email
+        };
+
+        var createResult = await _userManager.CreateAsync(user, request.Password);
+        if (!createResult.Succeeded)
+        {
+            var firstError = createResult.Errors.First();
+            return Result.Failure<AuthResponse>(new Error(firstError.Code, firstError.Description, (int)HttpStatusCodes.BadRequest ));
+        }
+
+        var roleResult = await _userManager.AddToRoleAsync(user, request.Role );
+
+        if (!roleResult.Succeeded)
+        {
+            await _userManager.DeleteAsync(user);
+
+            var firstError = roleResult.Errors.First();
+            return Result.Failure<AuthResponse>(new Error(firstError.Code, firstError.Description, (int)HttpStatusCodes.BadRequest ));
+        }
+
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        var (token, expiresIn) = _jwtProvider.GenerateToken(user.Id, user.Email!, roles);
+
+        var response = new AuthResponse(user.Id,
+            user.Email!, token, expiresIn
+        );
+
+        return Result.Success(response);
+
     }
 }
