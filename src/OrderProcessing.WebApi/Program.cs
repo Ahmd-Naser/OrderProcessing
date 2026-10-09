@@ -3,11 +3,14 @@ using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OrderProcessing.Application.Auth.Services;
 using OrderProcessing.Application.Common.Behaviors;
 using OrderProcessing.Application.Common.Interfaces;
 using OrderProcessing.Application.Products.Commands.CreateProduct;
+using OrderProcessing.Infrastructure.Authentication;
 using OrderProcessing.Infrastructure.Services;
 using OrderProcessing.Persistence.Identity.Models;
+using OrderProcessing.Persistence.Identity.Services;
 using OrderProcessing.Persistence.Persistence;
 using Scalar.AspNetCore;
 using Stripe;
@@ -59,6 +62,11 @@ StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // تسجيل الخدمة
 builder.Services.AddScoped<IPaymentService, StripePaymentService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
+builder.Services.AddSingleton<IJwtProvider, JwtProvider>();
 
 
 var app = builder.Build();

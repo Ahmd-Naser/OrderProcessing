@@ -4,14 +4,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.Extensions.Options;
 using System.Text;
+using OrderProcessing.Application.Auth.Services;
 
 namespace OrderProcessing.Infrastructure.Authentication;
 
 public class JwtProvider(
-    JwtOptions options
-)
+    IOptions<JwtOptions> options
+) : IJwtProvider
 {
-    private readonly JwtOptions _options = options;
+    private readonly JwtOptions _options = options.Value;
 
     public (string Token, int ExpiresIn) GenerateToken(
         string userId,
