@@ -7,4 +7,4 @@ namespace OrderProcessing.Application.Auth.Common;
 public record LoginCommand(
     string Email,
     string Password
-);
+) : IRequest<Result<AuthResponse>>;
