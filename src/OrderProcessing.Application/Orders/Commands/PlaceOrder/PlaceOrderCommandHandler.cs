@@ -12,9 +12,9 @@ public class PlaceOrderCommandHandler(IApplicationDbContext context ) : IRequest
         
 
         var cart = await _context.Carts
-        .Include(c => c.CartItems)
-        .ThenInclude(ci => ci.Product)
-        .FirstOrDefaultAsync(c => c.UserId == request.UserId, cancellationToken);
+            .Include(c => c.CartItems)
+            //.ThenInclude(ci => ci.Product) // TODO
+            .FirstOrDefaultAsync(c => c.UserId == request.UserId, cancellationToken);
 
         if(cart is null || !cart.CartItems.Any())
             return Result.Failure<int>( CartErrors.EmptyCart());

@@ -35,8 +35,12 @@ public class AuthService(
 
         var (token, expiresIn) = _jwtProvider.GenerateToken(user.Id , user.Email! , roles);
 
-        var response = new AuthResponse(user.Id,
-            user.Email!, token, expiresIn 
+        var response = new AuthResponse(
+            user.Id,
+            user.Email!,
+            user.FullName ?? user.StoreName !,
+            token,
+            expiresIn
         );
 
         return Result.Success(response);
@@ -71,8 +75,12 @@ public class AuthService(
 
         var (token, expiresIn) = _jwtProvider.GenerateToken(user.Id, user.Email!, roles);
 
-        var response = new AuthResponse(user.Id,
-            user.Email!, token, expiresIn
+        var response = new AuthResponse(
+            user.Id,
+            user.Email!,
+            user.FullName ?? user.StoreName ! ,
+            token, 
+            expiresIn
         );
 
         return Result.Success(response);

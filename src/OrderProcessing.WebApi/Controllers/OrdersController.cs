@@ -19,8 +19,7 @@ public class OrdersController(ISender sender , IPaymentService paymentService) :
     [HttpPost]
     public async Task<IActionResult> PlaceOrder(CancellationToken cancellationToken)
     {
-        // هنجيب الـ UserId من الـ Token (Claims)
-        var userId = "user-123";
+        var userId = User.GetUserId();
 
         if (!Request.Headers.TryGetValue("X-Idempotency-Key", out var headerValue) ||
             !Guid.TryParse(headerValue, out var idempotencyKey))
@@ -42,9 +41,9 @@ public class OrdersController(ISender sender , IPaymentService paymentService) :
     [HttpGet("my-orders")]
     public async Task<IActionResult> GetUserOrders( CancellationToken cancellationToken)
     {
-        var userId = "user-123";
+        var userId = User.GetUserId();
 
-        var query = new GetUserOrdersQuery(userId);
+        var query = new GetUserOrdersQuery(userId!);
         var result = await _mediator.Send(query, cancellationToken);
 
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
@@ -53,9 +52,9 @@ public class OrdersController(ISender sender , IPaymentService paymentService) :
     [HttpGet("{orderId}")]
     public async Task<IActionResult> GetUserOrderById(int orderId, CancellationToken cancellationToken)
     {
-        var userId = "user-123";
+        var userId = User.GetUserId();
 
-        var query = new GetUserOrderByIdQuery(userId, orderId);
+        var query = new GetUserOrderByIdQuery(userId!, orderId);
         var result = await _mediator.Send(query, cancellationToken);
 
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem();

@@ -1,15 +1,18 @@
-﻿using OrderProcessing.Application.Products.Commands.AssignTagsToProduct;
+﻿using Microsoft.AspNetCore.Authorization;
+using OrderProcessing.Application.Products.Commands.AssignTagsToProduct;
 using OrderProcessing.Application.Products.Commands.CreateProduct;
 using OrderProcessing.Application.Products.Commands.DeleteProduct;
 using OrderProcessing.Application.Products.Commands.UpdateIsActiveProduct;
 using OrderProcessing.Application.Products.Commands.UpdateProduct;
 using OrderProcessing.Application.Products.Queries.GetAllProducts;
 using OrderProcessing.Application.Products.Queries.GetProductById;
+using OrderProcessing.Domain.Consts;
 
 namespace OrderProcessing.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProductsController(ISender mediator) : ControllerBase
 {
     private readonly ISender _mediator = mediator;
@@ -24,7 +27,7 @@ public class ProductsController(ISender mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
 
-    [HttpPost]
+    [Authorize(DefaultRoles.Vendor)]
     public async Task<ActionResult<int>> Create([FromBody] CreateProductCommand command, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(command, cancellationToken);
@@ -33,6 +36,7 @@ public class ProductsController(ISender mediator) : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(DefaultRoles.Vendor)]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductCommand command, CancellationToken cancellationToken)
     {
         var updatedCommand = command with { Id = id };
@@ -76,6 +80,7 @@ public class ProductsController(ISender mediator) : ControllerBase
     }
 
     [HttpPut("{id}/is-active-toggle")]
+    [Authorize(DefaultRoles.Vendor)]
     public async Task<IActionResult> ToggleIsActive([FromRoute] int id, CancellationToken cancellationToken)
     {
         var command = new UpdateIsActiveProductCommand(id);
@@ -87,6 +92,7 @@ public class ProductsController(ISender mediator) : ControllerBase
    
 
     [HttpPut("{id}/tags")]
+    [Authorize(DefaultRoles.Vendor)]
     public async Task<IActionResult> AssignTags([FromRoute] int id, [FromBody] AssignTagsToProductCommand command, CancellationToken cancellationToken)
     {
         var updatedCommand = command with { ProductId = id };

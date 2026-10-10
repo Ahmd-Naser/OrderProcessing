@@ -19,7 +19,7 @@ public class IdempotencyBehavior<TRequest, TResponse>(IApplicationDbContext cont
         if (await _context.IdempotencyKeys.AnyAsync(k => k.Key == request.IdempotencyKey, cancellationToken))
         {
             // نرجع الفشل فوراً بدون تنفيذ الـ Handler
-            return (TResponse)(object)Result.Failure(OrderErrors.DuplicateRequest());
+            return (TResponse)Result.Failure(OrderErrors.DuplicateRequest());
         }
 
         // 2. تسجيل الـ Key (سيتم حفظه فعلياً مع حفظ الأوردر في الـ Handler)

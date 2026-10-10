@@ -1,15 +1,18 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using OrderProcessing.Application.Carts.Commands.AddToCart;
 using OrderProcessing.Application.Carts.Commands.DeleteCartItem;
 using OrderProcessing.Application.Carts.Commands.UpdateCartItem;
 using OrderProcessing.Application.Carts.Queries.GetAllCartItems;
 using OrderProcessing.Application.Carts.Queries.GetCheckoutPreview;
+using OrderProcessing.Domain.Consts;
 using OrderProcessing.WebApi.Contracts.Carts;
 
 namespace OrderProcessing.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(DefaultRoles.Customer)]
 public class CartsController(ISender mediator) : ControllerBase
 {
     private readonly ISender _mediator = mediator;
@@ -17,8 +20,8 @@ public class CartsController(ISender mediator) : ControllerBase
     [HttpPost("")]
     public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest request, CancellationToken cancellationToken)
     {
-        var userId = "user-123"; // Replace with actual
-        var command = new AddToCartCommand(userId, request.ProductId, request.Quantity);
+        var userId = User.GetUserId(); 
+        var command = new AddToCartCommand(userId!, request.ProductId, request.Quantity);
 
         var result = await _mediator.Send(command, cancellationToken);
 
@@ -28,9 +31,9 @@ public class CartsController(ISender mediator) : ControllerBase
     [HttpPut("{cartId}/items/{productId}")]
     public async Task<IActionResult> UpdateCartItem([FromRoute]int cartId, [FromRoute] int productId, [FromBody] UpdateCartItemRequest request, CancellationToken cancellationToken)
     {
-        var userId = "user-123"; // Replace with actual
+        var userId = User.GetUserId();
 
-        var command = new UpdateCartItemCommand(userId, cartId, productId, request.Quantity);
+        var command = new UpdateCartItemCommand(userId!, cartId, productId, request.Quantity);
 
         var result = await _mediator.Send(command, cancellationToken);
 
@@ -40,9 +43,9 @@ public class CartsController(ISender mediator) : ControllerBase
     [HttpDelete("{cartId}/items/{productId}")]
     public async Task<IActionResult> DeleteCartItem([FromRoute]int cartId, [FromRoute] int productId, CancellationToken cancellationToken)
     {
-        var userId = "user-123"; // Replace with actual
+        var userId = User.GetUserId();
 
-        var command = new DeleteCartItemCommand(userId, cartId, productId);
+        var command = new DeleteCartItemCommand(userId!, cartId, productId);
 
         var result = await _mediator.Send(command, cancellationToken);
 
@@ -52,9 +55,9 @@ public class CartsController(ISender mediator) : ControllerBase
     [HttpGet("my-cart")]
     public async Task<IActionResult> GetCart( CancellationToken cancellationToken)
     {
-        var userId = "user-123"; // Replace with actual
+        var userId = User.GetUserId();
 
-        var query = new GetCartQuery(userId);
+        var query = new GetCartQuery(userId!);
 
         var result = await _mediator.Send(query, cancellationToken);
 
@@ -64,9 +67,9 @@ public class CartsController(ISender mediator) : ControllerBase
     [HttpGet("checkout-preview")]
     public async Task<IActionResult> GetCheckoutPreview(CancellationToken cancellationToken)
     {
-        var userId = "user-123"; // Replace with actual
+        var userId = User.GetUserId();
 
-        var query = new GetCheckoutPreviewQuery(userId);
+        var query = new GetCheckoutPreviewQuery(userId!);
 
         var result = await _mediator.Send(query, cancellationToken);
 

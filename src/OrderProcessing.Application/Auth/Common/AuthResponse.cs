@@ -7,8 +7,7 @@ namespace OrderProcessing.Application.Auth.Common;
 public record AuthResponse(
     string Id,
     string Email,
-    //string FirstName,
-    //string LastName,
+    string Name,
     string Token,
     int ExpiresIn
 );
