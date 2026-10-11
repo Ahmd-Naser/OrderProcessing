@@ -6,4 +6,7 @@
     <Project Path="src/OrderProcessing.Persistence/OrderProcessing.Persistence.csproj" />
     <Project Path="src/OrderProcessing.WebApi/OrderProcessing.WebApi.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OrderProcessing.Application.Tests/OrderProcessing.Application.Tests.csproj" />
+  </Folder>
 </Solution>
