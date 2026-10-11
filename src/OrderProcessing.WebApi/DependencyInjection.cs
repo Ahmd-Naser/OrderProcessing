@@ -75,6 +75,9 @@ public static class DependencyInjection
 
     private static IServiceCollection AddWebApiServices(this IServiceCollection services)
     {
+        services.AddProblemDetails();
+        services.AddExceptionHandler<Infrastructure.GlobalExceptionHandler>();
+
         services.AddControllers();
         services.AddEndpointsApiExplorer();
 
