@@ -10,7 +10,7 @@ internal class DeleteProductCommandHandler(IApplicationDbContext context) : IReq
     public async Task<Result> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
         var rowsAffected = await _context.Products
-            .Where(p => p.Id == request.Id)
+            .Where(p => p.Id == request.Id && p.UserId == request.UserId)
             .ExecuteDeleteAsync(cancellationToken);
 
         if (rowsAffected == 0)

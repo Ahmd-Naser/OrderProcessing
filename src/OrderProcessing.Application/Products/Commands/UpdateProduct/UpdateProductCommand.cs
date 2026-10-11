@@ -10,5 +10,5 @@ public record UpdateProductCommand(
     decimal Price,
     int Stock,
     List<string> Pics,
-    string UserId
+    [property: JsonIgnore] string UserId
 ) : IRequest<Result>;

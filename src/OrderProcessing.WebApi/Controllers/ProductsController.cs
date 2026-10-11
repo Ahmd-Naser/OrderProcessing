@@ -30,7 +30,9 @@ public class ProductsController(ISender mediator) : ControllerBase
     [Authorize(DefaultRoles.Vendor)]
     public async Task<ActionResult<int>> Create([FromBody] CreateProductCommand command, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(command, cancellationToken);
+        var userId = User.GetUserId();
+        var updatedCommand = command with { UserId = userId! };
+        var result = await _mediator.Send(updatedCommand , cancellationToken);
 
         return CreatedAtAction(nameof(Create), new { id = result.Value }, result.Value);
     }
@@ -39,7 +41,8 @@ public class ProductsController(ISender mediator) : ControllerBase
     [Authorize(DefaultRoles.Vendor)]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        var updatedCommand = command with { Id = id };
+        var userId = User.GetUserId();
+        var updatedCommand = command with { Id = id , UserId = userId!};
         var result = await _mediator.Send(updatedCommand, cancellationToken);
 
         return result.IsSuccess ? NoContent() : result.ToProblem();
@@ -49,7 +52,9 @@ public class ProductsController(ISender mediator) : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var command = new DeleteProductCommand(id);
+        var userId = User.GetUserId();
+
+        var command = new DeleteProductCommand(id, userId!);
         var result = await _mediator.Send(command, cancellationToken);
 
         return result.IsSuccess ? NoContent() : result.ToProblem();
@@ -83,7 +88,8 @@ public class ProductsController(ISender mediator) : ControllerBase
     [Authorize(DefaultRoles.Vendor)]
     public async Task<IActionResult> ToggleIsActive([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var command = new UpdateIsActiveProductCommand(id);
+        var userId = User.GetUserId();
+        var command = new UpdateIsActiveProductCommand(id, userId!);
         var result = await _mediator.Send(command, cancellationToken);
 
         return result.IsSuccess ? NoContent() : result.ToProblem();
@@ -95,7 +101,8 @@ public class ProductsController(ISender mediator) : ControllerBase
     [Authorize(DefaultRoles.Vendor)]
     public async Task<IActionResult> AssignTags([FromRoute] int id, [FromBody] AssignTagsToProductCommand command, CancellationToken cancellationToken)
     {
-        var updatedCommand = command with { ProductId = id };
+        var userId = User.GetUserId();
+        var updatedCommand = command with { ProductId = id, UserId = userId! };
         var result = await _mediator.Send(updatedCommand, cancellationToken);
 
         return result.IsSuccess ? NoContent() : result.ToProblem();

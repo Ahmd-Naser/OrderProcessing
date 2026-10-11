@@ -7,5 +7,6 @@ namespace OrderProcessing.Application.Products.Commands.AssignTagsToProduct;
 
 public record AssignTagsToProductCommand(
     [property: JsonIgnore] int ProductId,
-    List<int> TagIds
+    List<int> TagIds,
+    [property: JsonIgnore] string UserId
 ) : IRequest<Result>;

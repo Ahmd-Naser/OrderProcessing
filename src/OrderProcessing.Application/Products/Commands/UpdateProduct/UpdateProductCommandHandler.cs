@@ -9,7 +9,7 @@ internal class UpdateProductCommandHandler(IApplicationDbContext context) : IReq
     private readonly IApplicationDbContext _context = context;
     public async Task<Result> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _context.Products.FindAsync(request.Id, cancellationToken);
+        var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == request.Id && p.UserId == request.UserId , cancellationToken);
 
         if (product == null)
             return Result.Failure(ProductErrors.NotFound(request.Id));
@@ -20,7 +20,6 @@ internal class UpdateProductCommandHandler(IApplicationDbContext context) : IReq
         product.Price = request.Price;
         product.Stock = request.Stock;
         product.Pics = request.Pics;
-        product.UserId = request.UserId;
 
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();

@@ -15,7 +15,7 @@ public class UpdateIsActiveProductHandler(IApplicationDbContext context) : IRequ
     {
         
         int rowAffected = await _context.Products
-            .Where(p=> p.Id == request.Id)
+            .Where(p=> p.Id == request.Id && p.UserId == request.UserId)
             .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.IsActive, p => !p.IsActive), cancellationToken);
 
         if (rowAffected == 0)

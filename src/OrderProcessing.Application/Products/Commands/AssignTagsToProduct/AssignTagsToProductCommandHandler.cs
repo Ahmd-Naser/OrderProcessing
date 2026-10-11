@@ -12,8 +12,12 @@ public class AssignTagsToProductCommandHandler(IApplicationDbContext context) : 
 
     public async Task<Result> Handle(AssignTagsToProductCommand request, CancellationToken cancellationToken)
     {
-        if(await _context.Products.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == request.ProductId, cancellationToken) is not { } product)
+        if(await _context.Products.Include(p => p.Tags)
+            .FirstOrDefaultAsync(p => p.Id == request.ProductId  , cancellationToken) is not { } product)
             return Result.Failure(ProductErrors.NotFound(request.ProductId));
+
+        if(product.UserId != request.UserId)
+            return Result.Failure(ProductErrors.Forbidden(request.ProductId));
 
         var newTags = await _context.Tags
             .Where(t => request.TagIds.Contains(t.Id))
