@@ -12,14 +12,14 @@ public class DeleteTagCommandHandler(IApplicationDbContext context) : IRequestHa
 
     public async Task<Result> Handle(DeleteTagCommand request, CancellationToken cancellationToken)
     {
-        var tagExists = await _context.Tags.AnyAsync(t => t.Id == request.Id, cancellationToken);
 
-        if (!tagExists)
-            return Result.Failure(TagErrors.NotFound(request.Id));
-
-        await _context.Tags
+        var affectedRows = await _context.Tags
             .Where(t => t.Id == request.Id)
             .ExecuteDeleteAsync(cancellationToken);
+
+        if(affectedRows == 0)
+            return Result.Failure(TagErrors.NotFound(request.Id));
+
 
         return Result.Success();
     }

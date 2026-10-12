@@ -4,7 +4,7 @@ using OrderProcessing.Application.Common.Interfaces;
 
 namespace OrderProcessing.Application.Tags.Queries.GetTagById;
 
-internal class GetTagByIdHandler(IApplicationDbContext context) : IRequestHandler<GetTagByIdQuery, Result<TagResponse>>
+public class GetTagByIdHandler(IApplicationDbContext context) : IRequestHandler<GetTagByIdQuery, Result<TagResponse>>
 {
     private readonly IApplicationDbContext _context = context;
 
