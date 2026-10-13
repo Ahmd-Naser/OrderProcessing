@@ -113,7 +113,7 @@ Orders require an Idempotency Key in the header to ensure safe retries:
 
 ## 👨‍💻 Author
 
-**Ahmed Nasser Gaber Soliman**  
+**Ahmed Nasser**  
 Backend Software Engineer specializing in C#, .NET, and Scalable Backend Architecture.  
 - [GitHub](https://github.com/Ahmd-Naser)
 
