@@ -7,6 +7,9 @@ using OrderProcessing.Application.Orders.Commands.CancelOrder;
 
 namespace OrderProcessing.WebApi.Controllers;
 
+/// <summary>
+/// Handles incoming webhooks from external payment providers (e.g., Stripe).
+/// </summary>
 [Route("api/[controller]")]
 [ApiController]
 public class WebhooksController(ISender sender, IConfiguration configuration) : ControllerBase
@@ -14,7 +17,23 @@ public class WebhooksController(ISender sender, IConfiguration configuration) : 
     private readonly ISender _mediator = sender;
     private readonly IConfiguration _configuration = configuration;
 
+    /// <summary>
+    /// Endpoint for receiving Stripe webhook events.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint is called automatically by Stripe when certain events occur (e.g., successful payment or session expiration).
+    /// It verifies the cryptographic signature to ensure the request is genuinely from Stripe, then dispatches the appropriate command to update the order status.
+    /// 
+    /// Handled Events:
+    /// - `checkout.session.completed`: Marks the corresponding order as Paid.
+    /// - `checkout.session.expired`: Cancels the corresponding order.
+    /// </remarks>
+    /// <returns>Returns 200 OK to acknowledge receipt of the event, or 400 Bad Request if signature verification fails.</returns>
+    /// <response code="200">The webhook event was successfully received and processed.</response>
+    /// <response code="400">The request is invalid, missing a signature, or failed cryptographic verification.</response>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Index()
     {
         var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
