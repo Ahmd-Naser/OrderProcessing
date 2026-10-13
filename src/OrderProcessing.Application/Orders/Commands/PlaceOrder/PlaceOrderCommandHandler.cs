@@ -3,13 +3,12 @@ using OrderProcessing.Domain.Entities;
 
 namespace OrderProcessing.Application.Orders.Commands.PlaceOrder;
 
-public class PlaceOrderCommandHandler(IApplicationDbContext context ) : IRequestHandler<PlaceOrderCommand, Result<int>>
+public class PlaceOrderCommandHandler(IApplicationDbContext context ) : IRequestHandler<PlaceOrderCommand, Result<int> >
 {
     private readonly IApplicationDbContext _context = context;
 
     public async Task<Result<int>> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
     {
-        
 
         var cart = await _context.Carts
             .Include(c => c.CartItems)
